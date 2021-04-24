@@ -3,7 +3,11 @@ import sys
 from solutions.requirements_group_1_solution.match import Match
 
 
-def play_game():
+def play_game() -> None:
+    """
+    Set up the game and play until it's done.
+    :return: None
+    """
 
     # Initiliaze stuff
     match = Match()

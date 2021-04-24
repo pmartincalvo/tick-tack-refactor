@@ -6,7 +6,7 @@ Tick-tack-refactor is a small, educational project to improve coding skills. It
 works as a hands-on project, suited for beginners (advanced developers with a 
 thing for perfectionism might enjoy as well).
 
-The process goes as follow:
+The process goes as follows:
 
 1. The project contains a sequence of groups of requirements revolving around 
 the tick-tack-toe game. The first group is the minimum necessary to play the 

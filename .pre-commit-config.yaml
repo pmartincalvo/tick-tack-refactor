@@ -8,6 +8,8 @@ repos:
       hooks:
         - id: pylint
           name: pylint
-          entry: pylint --rcfile=.pylintrc solutions
-          language: python
+          entry: pylint
+          args:
+            - --rcfile=.pylintrc
+          language: system
           types: [python]

@@ -1,1 +1,2 @@
 pylint==2.7.4
+pre-commit

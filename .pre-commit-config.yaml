@@ -1,0 +1,13 @@
+repos:
+    - repo: https://github.com/psf/black
+      rev: 19.3b0
+      hooks:
+        - id: black
+          args: [solutions]
+    - repo: local
+      hooks:
+        - id: pylint
+          name: pylint
+          entry: pylint --rcfile=.pylintrc solutions
+          language: python
+          types: [python]

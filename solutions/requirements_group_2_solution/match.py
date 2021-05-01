@@ -8,9 +8,10 @@ class Match:
     game.
     """
 
-    def __init__(self):
+    def __init__(self, first_player: int):
         """
         Set up initial state.
+        :param first_player: the number of the player who moves first.
         """
         self._board = Board()
         self._players_by_number = {
@@ -20,7 +21,7 @@ class Match:
         self._players_by_mark = {
             player.mark: player for player in self._players_by_number.values()
         }
-        self._current_player = self._players_by_number[1]
+        self._current_player = self._players_by_number[first_player]
 
     def play_turn(self) -> None:
         """

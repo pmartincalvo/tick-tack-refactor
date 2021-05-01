@@ -1,6 +1,7 @@
 import sys
 
 from solutions.requirements_group_2_solution.match import Match
+from solutions.requirements_group_2_solution.utils import input_with_validation
 
 
 def play_game() -> None:
@@ -9,8 +10,15 @@ def play_game() -> None:
     :return: None
     """
 
+    chosen_first_player = int(
+        input_with_validation(
+            "Pick the first player [1, 2]:",
+            validation_func=lambda x: x in ["1", "2"],
+            retry=True,
+        )
+    )
     # Initiliaze stuff
-    match = Match()
+    match = Match(first_player=chosen_first_player)
 
     # Enter game loop
     while not match.is_finished:

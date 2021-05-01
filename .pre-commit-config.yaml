@@ -1,15 +1,21 @@
 repos:
     - repo: https://github.com/psf/black
-      rev: 19.3b0
+      rev: 21.4b0
       hooks:
         - id: black
           args: [solutions]
+    - repo: https://github.com/PyCQA/isort
+      rev: 5.8.0
+      hooks:
+        - id: isort
     - repo: local
       hooks:
         - id: pylint
           name: pylint
           entry: pylint
           args:
-            - --rcfile=.pylintrc
+            [
+            "--rcfile=.pylintrc",
+            ]
           language: system
           types: [python]

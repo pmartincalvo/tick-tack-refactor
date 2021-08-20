@@ -15,8 +15,8 @@ class Match:
         """
         self._board = Board()
         self._players_by_number = {
-            1: Player(number=1, mark="X"),
-            2: Player(number=2, mark="O"),
+            1: Player(number_id=1, mark="X"),
+            2: Player(number_id=2, mark="O"),
         }
         self._players_by_mark = {
             player.mark: player for player in self._players_by_number.values()
@@ -29,7 +29,7 @@ class Match:
         :return: None
         """
         print(render_board(self._board))
-        print(f"Next move: Player {self._current_player.number}")
+        print(f"Next move: Player {self._current_player.number_id}")
 
         input_is_valid = False
         while not input_is_valid:
@@ -62,10 +62,10 @@ class Match:
         return self._board.there_is_winning_combo or self._board.there_is_stalemate
 
     def _switch_current_player(self) -> None:
-        if self._current_player.number == 1:
+        if self._current_player.number_id == 1:
             self._current_player = self._players_by_number[2]
             return
-        if self._current_player.number == 2:
+        if self._current_player.number_id == 2:
             self._current_player = self._players_by_number[1]
             return
 
@@ -90,12 +90,12 @@ class Player:
     A player in the match.
     """
 
-    def __init__(self, number: int, mark: str):
+    def __init__(self, number_id: int, mark: str):
         """
         Identify the player with a number and assign which mark he will use on
         the board.
-        :param number: the player's number
+        :param number_id: the player's number
         :param mark: the mark to use on the board.
         """
-        self.number = number
+        self.number_id = number_id
         self.mark = mark

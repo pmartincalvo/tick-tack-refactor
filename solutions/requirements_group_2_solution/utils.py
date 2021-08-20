@@ -14,7 +14,7 @@ def input_with_validation(prompt: str, validation_func: Callable, retry: bool) -
     """
 
     while True:
-        received_value = input(__prompt=prompt)
+        received_value = input(prompt)
         is_valid = validation_func(received_value)
         if is_valid:
             return received_value

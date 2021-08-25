@@ -26,7 +26,7 @@ def play_game() -> None:
 
     match.print_closing_info()
 
-    print("Press enter to exit")
+    input("Press enter to exit")
     sys.exit()
 
 

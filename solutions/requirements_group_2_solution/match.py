@@ -1,5 +1,8 @@
 from solutions.requirements_group_2_solution.board import Board
-from solutions.requirements_group_2_solution.rendering import render_board
+from solutions.requirements_group_2_solution.rendering import (
+    BoardRenderer,
+    SpecificCellsFilter,
+)
 
 
 class Match:
@@ -14,6 +17,7 @@ class Match:
         :param first_player: the number of the player who moves first.
         """
         self._board = Board()
+        self._board_renderer = BoardRenderer(self._board)
         self._players_by_number = {
             1: Player(number_id=1, mark="X"),
             2: Player(number_id=2, mark="O"),
@@ -28,7 +32,7 @@ class Match:
         Flow of a turn.
         :return: None
         """
-        print(render_board(self._board))
+        print(self._board_renderer.render())
         print(f"Next move: Player {self._current_player.number_id}")
 
         input_is_valid = False
@@ -75,13 +79,18 @@ class Match:
         match.
         :return: None
         """
-        print(render_board(board=self._board))
 
         if self._board.there_is_winning_combo:
+            print(
+                self._board_renderer.render(
+                    SpecificCellsFilter(cells_to_keep=self._board.get_winning_cells())
+                )
+            )
             winning_mark = self._board.get_winning_mark()
             winning_player = self._players_by_mark[winning_mark]
             print(f"Player {winning_player.number_id} has won!!!!!!!!!!!!!!!!!!!!!!")
         if self._board.there_is_stalemate:
+            print(self._board_renderer.render())
             print("Stalemate. Nobody wins this time!")
 
 

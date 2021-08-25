@@ -33,6 +33,17 @@ class Cell:
             return True
         return False
 
+    def __eq__(self, other) -> bool:
+        """
+        Use number_id to determine if it is the same cell.
+        :param other: the cell to compare to.
+        :return: whether it's the same cell.
+        """
+        if not isinstance(other, Cell):
+            return False
+
+        return self.number_id == other.number_id
+
 
 class CellGroup:
     """
@@ -84,6 +95,34 @@ class CellGroup:
 
         return unique_mark_count == 1
 
+    def __iter__(self) -> Cell:
+        """
+        Implement iteration of the underlying cell list.
+        :return: ordered cells, one at a time.
+        """
+        for cell in self._cells:
+            yield cell
+
+    def __getitem__(self, index: int) -> Cell:
+        """
+        Position based access to internal cell list.
+        :param index: the position of the cell of interest.
+        :return: the cell of interest.
+        """
+        return self._cells[index]
+
+    def __contains__(self, item: Cell) -> bool:
+        """
+        Checks whether a cell is in the group.
+        :param item: the cell that may be in the group.
+        :return: true if the cell is in the group, false otherwise.
+        """
+
+        for cell in self:
+            if cell == item:
+                return True
+        return False
+
 
 class Board:
     """
@@ -134,7 +173,7 @@ class Board:
         Find out what is the mark present in the winning group of cells.
         :return: The winning mark.
         """
-        winning_cells = self._get_winning_cells()
+        winning_cells = self.get_winning_cells()
         winning_mark = min(
             winning_cells.present_marks
         )  # Set with only one value, use min to get the value
@@ -168,7 +207,7 @@ class Board:
         cell.contents = mark
 
     @staticmethod
-    def _generate_empty_board() -> List[List[Cell]]:
+    def _generate_empty_board() -> List[CellGroup]:
         """
         Create all the cells that compose an empty board, in a data structure
         that replicates their coordinates position.
@@ -185,9 +224,7 @@ class Board:
         return cells_by_position
 
     @staticmethod
-    def _generate_row_of_cells(
-        generated_cells_count: int, row_index: int
-    ) -> List[Cell]:
+    def _generate_row_of_cells(generated_cells_count: int, row_index: int) -> CellGroup:
         """
         Create a row of empty cells, assigning them sequential number ids.
         :param generated_cells_count: the number to start assigning numbers
@@ -206,7 +243,7 @@ class Board:
             )
             generated_cells_count += 1
 
-        return row_contents
+        return CellGroup(row_contents)
 
     @staticmethod
     def _structure_cells_by_number(
@@ -367,7 +404,7 @@ class Board:
             and cells_to_check.there_is_only_one_mark_type
         )
 
-    def _get_winning_cells(self) -> CellGroup:
+    def get_winning_cells(self) -> CellGroup:
         """
         Search the board to find the winning group of cells and return it.
         :return: the winning group of cells.

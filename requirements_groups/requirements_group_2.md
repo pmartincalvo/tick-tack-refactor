@@ -45,3 +45,5 @@ give some input to make a choice.
 2. The match is played exactly as it was specified in requirements group 1.
 3. After someone wins or a stalemate is reached, the final board is printed. If someone
 has won, only the winning marks appear on the board.
+4. The CLI asks the user if he wants to play another match. The user says yes, and the flow repeats.
+5. The flow repeats until the user indicates it doesn't want to play another match.

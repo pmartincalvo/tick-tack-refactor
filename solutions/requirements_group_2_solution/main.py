@@ -10,21 +10,31 @@ def play_game() -> None:
     :return: None
     """
 
-    chosen_first_player = int(
-        input_with_validation(
-            "Pick the first player [1, 2]:",
-            validation_func=lambda x: x in ["1", "2"],
+    wants_to_play = "y"
+
+    while wants_to_play == "y":
+
+        chosen_first_player = int(
+            input_with_validation(
+                "Pick the first player [1, 2]:",
+                validation_func=lambda x: x in ["1", "2"],
+                retry=True,
+            )
+        )
+        # Initiliaze stuff
+        match = Match(first_player=chosen_first_player)
+
+        # Enter game loop
+        while not match.is_finished:
+            match.play_turn()
+
+        match.print_closing_info()
+
+        wants_to_play = input_with_validation(
+            "Do you want to play again? (y/n)",
+            validation_func=lambda x: x in ["y", "n"],
             retry=True,
         )
-    )
-    # Initiliaze stuff
-    match = Match(first_player=chosen_first_player)
-
-    # Enter game loop
-    while not match.is_finished:
-        match.play_turn()
-
-    match.print_closing_info()
 
     input("Press enter to exit")
     sys.exit()

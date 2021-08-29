@@ -130,15 +130,17 @@ class Board:
     contents.
     """
 
-    column_count = 3
-    row_count = 3
-    shape = (column_count, row_count)
-
-    def __init__(self):
+    def __init__(self, size: int):
         """
         Generate a blank board with no contents and make an internal data
         structure to keep the cells by their number id.
+        :param size: indicates the size of the board.
         """
+        self.column_count = size
+        self.row_count = size
+        self.shape = (self.column_count, self.row_count)
+        self.first_cell_id = 1
+        self.last_cell_id = self.column_count * self.row_count
         self.cells_by_position = self._generate_empty_board()
         self._cells_by_number = self._structure_cells_by_number(self.cells_by_position)
 
@@ -206,8 +208,7 @@ class Board:
         """
         cell.contents = mark
 
-    @staticmethod
-    def _generate_empty_board() -> List[CellGroup]:
+    def _generate_empty_board(self) -> List[CellGroup]:
         """
         Create all the cells that compose an empty board, in a data structure
         that replicates their coordinates position.
@@ -216,15 +217,16 @@ class Board:
         cells_by_position = []
 
         generated_cells_counter = 1
-        for row in range(0, Board.shape[0]):
-            row_contents = Board._generate_row_of_cells(generated_cells_counter, row)
+        for row in range(0, self.shape[0]):
+            row_contents = self._generate_row_of_cells(generated_cells_counter, row)
             cells_by_position.append(row_contents)
-            generated_cells_counter += Board.row_count
+            generated_cells_counter += self.row_count
 
         return cells_by_position
 
-    @staticmethod
-    def _generate_row_of_cells(generated_cells_count: int, row_index: int) -> CellGroup:
+    def _generate_row_of_cells(
+        self, generated_cells_count: int, row_index: int
+    ) -> CellGroup:
         """
         Create a row of empty cells, assigning them sequential number ids.
         :param generated_cells_count: the number to start assigning numbers
@@ -233,7 +235,7 @@ class Board:
         :return: a row of empty cells.
         """
         row_contents = []
-        for cell_in_row in range(0, Board.row_count):
+        for cell_in_row in range(0, self.row_count):
             row_contents.append(
                 Cell(
                     x_position=row_index,
@@ -247,7 +249,7 @@ class Board:
 
     @staticmethod
     def _structure_cells_by_number(
-        cells_by_position: List[List[Cell]],
+        cells_by_position: List[CellGroup],
     ) -> Dict[int, Cell]:
         """
         Create a dict structure where cells are keyed by their number id.
@@ -265,7 +267,7 @@ class Board:
         Check if there is any vertical winning combination.
         :return: True if so, False otherwise.
         """
-        for column_index in range(0, Board.column_count):
+        for column_index in range(0, self.column_count):
             if self._column_has_winning_combo(column_index):
                 return True
         return False
@@ -275,7 +277,7 @@ class Board:
         Check if there is any horizontal winning combination.
         :return: True if so, False otherwise.
         """
-        for row_index in range(0, Board.row_count):
+        for row_index in range(0, self.row_count):
             if self._row_has_winning_combo(row_index):
                 return True
         return False
@@ -347,7 +349,7 @@ class Board:
         return CellGroup(
             cells=[
                 self.cells_by_position[column_index][row_index]
-                for row_index in range(0, Board.row_count)
+                for row_index in range(0, self.row_count)
             ]
         )
 
@@ -360,7 +362,7 @@ class Board:
         return CellGroup(
             cells=[
                 self.cells_by_position[column_index][row_index]
-                for column_index in range(0, Board.column_count)
+                for column_index in range(0, self.column_count)
             ]
         )
 
@@ -372,12 +374,12 @@ class Board:
         """
         positions_by_index = {
             1: {  # Iterate top-bottom, left-right
-                "x_positions": range(0, Board.column_count),
-                "y_positions": range(0, Board.row_count),
+                "x_positions": range(0, self.column_count),
+                "y_positions": range(0, self.row_count),
             },
             2: {  # Iterate top-bottom, right-left
-                "x_positions": range(Board.column_count - 1, -1, -1),
-                "y_positions": range(0, Board.row_count),
+                "x_positions": range(self.column_count - 1, -1, -1),
+                "y_positions": range(0, self.row_count),
             },
         }
 
@@ -424,12 +426,12 @@ class Board:
 
         all_possible_lines = []
 
-        for column_index in range(0, Board.column_count):
+        for column_index in range(0, self.column_count):
             all_possible_lines.append(
                 self._get_cells_in_line(way="vertical", index=column_index)
             )
 
-        for row_index in range(0, Board.row_count):
+        for row_index in range(0, self.row_count):
             all_possible_lines.append(
                 self._get_cells_in_line(way="horizontal", index=row_index)
             )

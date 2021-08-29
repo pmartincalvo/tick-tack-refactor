@@ -1,8 +1,9 @@
-from solutions.requirements_group_2_solution.board import Board
-from solutions.requirements_group_2_solution.rendering import (
+from solutions.requirements_group_3_solution.board import Board
+from solutions.requirements_group_3_solution.rendering import (
     BoardRenderer,
     SpecificCellsFilter,
 )
+from solutions.requirements_group_3_solution.utils import input_with_validation
 
 
 class Match:
@@ -11,12 +12,13 @@ class Match:
     game.
     """
 
-    def __init__(self, first_player: int):
+    def __init__(self, first_player: int, board_size: int):
         """
         Set up initial state.
         :param first_player: the number of the player who moves first.
+        :param board_size: indicates the size of the board.
         """
-        self._board = Board()
+        self._board = Board(size=board_size)
         self._board_renderer = BoardRenderer(self._board)
         self._players_by_number = {
             1: Player(number_id=1, mark="X"),
@@ -35,23 +37,25 @@ class Match:
         print(self._board_renderer.render())
         print(f"Next move: Player {self._current_player.number_id}")
 
-        input_is_valid = False
-        while not input_is_valid:
-            chosen_cell = int(input("Which cell to mark?[1-9]"))
-            if not 1 <= chosen_cell <= 9:
-                print("That's not a valid cell number.")
-                print("Try again")
-                continue
-
+        while True:
+            chosen_cell = int(
+                input_with_validation(
+                    prompt=f"Which cell to mark?[{self._board.first_cell_id}"
+                    f"-{self._board.last_cell_id}]",
+                    validation_func=lambda x: self._board.first_cell_id
+                    <= int(x)
+                    <= self._board.last_cell_id,
+                    retry=True,
+                )
+            )
             try:
                 self._board.write_mark_on_cell_if_empty(
                     cell_number=chosen_cell, mark=self._current_player.mark
                 )
-                input_is_valid = True
+                break
             except ValueError:
                 print("Can't write on that cell, it already has a mark.")
                 print("Try again")
-                continue
 
         self._switch_current_player()
         print("/////////////////////////////")
@@ -59,7 +63,7 @@ class Match:
     @property
     def is_finished(self) -> bool:
         """
-        Check if the match is done, either because there is a winner of because
+        Check if the match is done, either because there is a winner or because
         a stalemate has been reached.
         :return: True if so, False otherwise.
         """

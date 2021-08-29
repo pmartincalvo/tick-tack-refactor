@@ -1,7 +1,7 @@
 import sys
 
-from solutions.requirements_group_2_solution.match import Match
-from solutions.requirements_group_2_solution.utils import input_with_validation
+from solutions.requirements_group_3_solution.match import Match
+from solutions.requirements_group_3_solution.utils import input_with_validation
 
 
 def play_game() -> None:
@@ -21,8 +21,17 @@ def play_game() -> None:
                 retry=True,
             )
         )
+
+        board_size = int(
+            input_with_validation(
+                "Would you like to play on a 3x3 or 4x4 board? [3, 4]:",
+                validation_func=lambda x: x in ["3", "4"],
+                retry=True,
+            )
+        )
+
         # Initiliaze stuff
-        match = Match(first_player=chosen_first_player)
+        match = Match(first_player=chosen_first_player, board_size=board_size)
 
         # Enter game loop
         while not match.is_finished:
